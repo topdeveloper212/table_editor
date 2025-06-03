@@ -1,29 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Switch, FormControlLabel, Typography, ThemeProvider, createTheme, useMediaQuery, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Grid, ThemeProvider, createTheme, useMediaQuery, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import TreeView from '../TreeView/TreeView';
 import TableGroup from '../TableGroup/TableGroup';
 
 const MainLayout = () => {
     const [selectedTree, setSelectedTree] = useState(null);
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        const savedMode = localStorage.getItem('darkMode');
-        return savedMode ? JSON.parse(savedMode) : false;
-    });
     const isMobile = useMediaQuery('(max-width:1024px)');
     const [selectedOption, setSelectedOption] = useState(61);
 
     const theme = createTheme({
-        palette: {
-            mode: isDarkMode ? 'dark' : 'light',
-            background: {
-                default: isDarkMode ? '#000000' : '#ffffff',
-                paper: isDarkMode ? '#121212' : '#ffffff',
-            },
-            text: {
-                primary: isDarkMode ? '#ffffff' : '#000000',
-                secondary: isDarkMode ? '#b0b0b0' : '#666666',
-            },
-        },
         components: {
             MuiPaper: {
                 styleOverrides: {
@@ -39,26 +24,12 @@ const MainLayout = () => {
                     },
                 },
             },
-            MuiTreeItem: {
-                styleOverrides: {
-                    label: {
-                        color: isDarkMode ? '#ffffff' : '#000000',
-                    },
-                },
-            },
         },
     });
-    let i = 0;
     const handleTreeSelect = (nodeData) => {
         if (nodeData && (!selectedTree || selectedTree.id !== nodeData.id)) {
             setSelectedTree(nodeData);
         }
-    };
-
-    const handleThemeChange = (event) => {
-        const newMode = event.target.checked;
-        setIsDarkMode(newMode);
-        localStorage.setItem('darkMode', JSON.stringify(newMode));
     };
 
     return (
@@ -87,20 +58,6 @@ const MainLayout = () => {
                             <MenuItem value="63">63</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={isDarkMode}
-                                onChange={handleThemeChange}
-                                color="primary"
-                            />
-                        }
-                        label={
-                            <Typography color="text.primary">
-                                {isDarkMode ? 'Dark Mode' : 'Light Mode'}
-                            </Typography>
-                        }
-                    />
                 </Box>
                 <Grid
                     container
